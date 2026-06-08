@@ -20,9 +20,6 @@
     "db:watch": "turbo -F @fossus/db db:watch",
     "db:stop": "turbo -F @fossus/db db:stop",
     "db:down": "turbo -F @fossus/db db:down",
-    "db:migrate:sql": "turbo -F @fossus/db db:migrate:sql",
-    "db:clean": "turbo -F @fossus/db db:clean",
-    "db:seed": "turbo -F @fossus/db db:seed",
     "check": "oxlint && oxfmt --write"
   },
   "dependencies": {

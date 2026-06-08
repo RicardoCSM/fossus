@@ -18,10 +18,7 @@
     "db:start": "docker compose up -d",
     "db:watch": "docker compose up",
     "db:stop": "docker compose stop",
-    "db:down": "docker compose down",
-    "db:migrate:sql": "docker exec -i fossus-mysql sh -c 'mysql -u\"$MYSQL_USER\" -p\"$MYSQL_PASSWORD\" \"$MYSQL_DATABASE\"' < src/schema/fossus.sql",
-    "db:clean": "docker exec -i fossus-mysql sh -c 'mysql -u\"$MYSQL_USER\" -p\"$MYSQL_PASSWORD\" -e \"DROP DATABASE IF EXISTS $MYSQL_DATABASE; CREATE DATABASE $MYSQL_DATABASE;\"'",
-    "db:seed": "docker exec -i fossus-mysql sh -c 'mysql -u\"$MYSQL_USER\" -p\"$MYSQL_PASSWORD\" \"$MYSQL_DATABASE\"' < src/seed.sql"
+    "db:down": "docker compose down"
   },
   "dependencies": {
     "@fossus/env": "*",
