@@ -44,6 +44,15 @@
     },
     "db:down": {
       "cache": false
+    },
+    "db:migrate:sql": {
+      "cache": false
+    },
+    "db:clean": {
+      "cache": false
+    },
+    "db:seed": {
+      "cache": false
     }
   }
 }

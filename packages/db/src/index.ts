@@ -1,7 +1,9 @@
 import { env } from "@fossus/env/server";
 import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 
-import { PrismaClient } from "../prisma/generated/client";
+import { PrismaClient, Prisma } from "../prisma/generated/client";
+
+export { Prisma };
 
 export function createPrismaClient() {
   const databaseUrl: string = env.DATABASE_URL;

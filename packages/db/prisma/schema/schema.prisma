@@ -1,10 +1,125 @@
 generator client {
-  provider      = "prisma-client"
-  output        = "../generated"
-  moduleFormat  = "esm"
-  runtime       = "nodejs"
+  provider     = "prisma-client"
+  output       = "../generated"
+  moduleFormat = "esm"
+  runtime      = "nodejs"
 }
 
 datasource db {
   provider = "mysql"
+}
+
+model alertas {
+  id             Int           @id @default(autoincrement())
+  bueiro_id      Int
+  tipo_alerta_id Int?
+  data_hora      DateTime      @db.DateTime(0)
+  nivel          String?       @db.VarChar(20)
+  descricao      String?       @db.Text
+  resolvido      Boolean?      @default(false)
+  bueiros        bueiros       @relation(fields: [bueiro_id], references: [id], onDelete: Cascade, map: "fk_alerta_bueiro")
+  tipos_alerta   tipos_alerta? @relation(fields: [tipo_alerta_id], references: [id], map: "fk_alerta_tipo")
+
+  @@index([tipo_alerta_id], map: "fk_alerta_tipo")
+  @@index([bueiro_id], map: "idx_alertas_bueiro")
+  @@index([data_hora], map: "idx_alertas_data")
+}
+
+model bueiros {
+  id               Int          @id @default(autoincrement())
+  endereco_id      Int
+  diametro         Decimal?     @db.Decimal(6, 2)
+  profundidade     Decimal?     @db.Decimal(6, 2)
+  capacidade_fluxo Decimal?     @db.Decimal(10, 2)
+  data_instalacao  DateTime?    @db.Date
+  alertas          alertas[]
+  enderecos        enderecos    @relation(fields: [endereco_id], references: [id], onDelete: Cascade, map: "fk_bueiro_endereco")
+  manutencao       manutencao[]
+  sensores         sensores[]
+
+  @@index([endereco_id], map: "fk_bueiro_endereco")
+}
+
+model enderecos {
+  id        Int       @id @default(autoincrement())
+  rua       String    @db.VarChar(100)
+  numero    Int?
+  cep       String?   @db.VarChar(10)
+  latitude  Decimal?  @db.Decimal(10, 8)
+  longitude Decimal?  @db.Decimal(11, 8)
+  bueiros   bueiros[]
+}
+
+model equipes {
+  id         Int          @id @default(autoincrement())
+  nome       String       @db.VarChar(100)
+  manutencao manutencao[]
+  telefones  telefones[]
+}
+
+model leituras {
+  id        BigInt   @id @default(autoincrement())
+  sensor_id Int
+  valor     Decimal  @db.Decimal(10, 2)
+  data_hora DateTime @db.DateTime(0)
+  sensores  sensores @relation(fields: [sensor_id], references: [id], onDelete: Cascade, map: "fk_leitura_sensor")
+
+  @@index([data_hora], map: "idx_leituras_data")
+  @@index([sensor_id], map: "idx_leituras_sensor")
+  @@index([sensor_id, data_hora], map: "idx_sensor_data")
+}
+
+model manutencao {
+  id            Int       @id @default(autoincrement())
+  bueiro_id     Int
+  equipe_id     Int
+  data_abertura DateTime? @db.DateTime(0)
+  data_execucao DateTime? @db.DateTime(0)
+  status        String?   @db.VarChar(30)
+  descricao     String?   @db.Text
+  bueiros       bueiros   @relation(fields: [bueiro_id], references: [id], onDelete: Cascade, map: "fk_manutencao_bueiro")
+  equipes       equipes   @relation(fields: [equipe_id], references: [id], map: "fk_manutencao_equipe")
+
+  @@index([equipe_id], map: "fk_manutencao_equipe")
+  @@index([bueiro_id], map: "idx_manutencao_bueiro")
+}
+
+model sensores {
+  id                Int          @id @default(autoincrement())
+  bueiro_id         Int
+  tipo_sensor_id    Int
+  fabricante        String?      @db.VarChar(100)
+  numero_serie      String?      @unique(map: "numero_serie") @db.VarChar(100)
+  data_instalacao   DateTime?    @db.Date
+  ultima_calibracao DateTime?    @db.Date
+  status            String?      @db.VarChar(30)
+  leituras          leituras[]
+  bueiros           bueiros      @relation(fields: [bueiro_id], references: [id], onDelete: Cascade, map: "fk_sensor_bueiro")
+  tipos_sensor      tipos_sensor @relation(fields: [tipo_sensor_id], references: [id], map: "fk_sensor_tipo")
+
+  @@index([tipo_sensor_id], map: "fk_sensor_tipo")
+  @@index([bueiro_id], map: "idx_sensores_bueiro")
+}
+
+model telefones {
+  id        Int     @id @default(autoincrement())
+  equipe_id Int
+  telefone  String? @db.VarChar(20)
+  equipes   equipes @relation(fields: [equipe_id], references: [id], onDelete: Cascade, map: "fk_telefone_equipe")
+
+  @@index([equipe_id], map: "fk_telefone_equipe")
+}
+
+model tipos_alerta {
+  id        Int       @id @default(autoincrement())
+  nome      String    @db.VarChar(50)
+  descricao String?   @db.Text
+  alertas   alertas[]
+}
+
+model tipos_sensor {
+  id       Int        @id @default(autoincrement())
+  nome     String     @db.VarChar(50)
+  unidade  String     @db.VarChar(20)
+  sensores sensores[]
 }
