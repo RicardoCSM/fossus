@@ -1,0 +1,31 @@
+// Better-T-Stack
+//
+// Website: https://www.better-t-stack.dev/
+// Stack Builder: https://www.better-t-stack.dev/new
+// Analytics: https://www.better-t-stack.dev/analytics
+// Showcase: https://www.better-t-stack.dev/showcase
+// Sponsor: https://github.com/sponsors/AmanVarshney01
+//
+// Add new addons with: npx create-better-t-stack add
+// This file is safe to delete
+
+{
+  "$schema": "https://r2.better-t-stack.dev/schema.json",
+  "version": "3.32.0",
+  "createdAt": "2026-06-08T20:06:07.785Z",
+  "reproducibleCommand": "npx create-better-t-stack@latest fossus --frontend next --backend express --runtime node --database mysql --orm prisma --api none --auth none --payments none --addons turborepo oxlint --examples none --db-setup docker --web-deploy none --server-deploy none --git --package-manager npm --install",
+  "database": "mysql",
+  "orm": "prisma",
+  "backend": "express",
+  "runtime": "node",
+  "frontend": ["next"],
+  "addons": ["turborepo", "oxlint"],
+  "examples": [],
+  "auth": "none",
+  "payments": "none",
+  "packageManager": "npm",
+  "dbSetup": "docker",
+  "api": "none",
+  "webDeploy": "none",
+  "serverDeploy": "none",
+}

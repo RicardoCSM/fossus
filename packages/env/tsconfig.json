@@ -1,0 +1,3 @@
+{
+  "extends": "@fossus/config/tsconfig.base.json"
+}
