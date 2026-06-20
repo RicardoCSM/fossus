@@ -28,6 +28,13 @@ CREATE TABLE tipos_sensor (
     unidade VARCHAR(20) NOT NULL
 );
 
+INSERT INTO tipos_sensor (nome, unidade) VALUES
+("chuva", "mm"),
+("vazão", "L/s"),
+("sedimento", "cm"),
+("nível da água", "cm"),
+("resíduos sólidos", "kg");
+
 CREATE TABLE sensores (
     id INT AUTO_INCREMENT PRIMARY KEY,
 
