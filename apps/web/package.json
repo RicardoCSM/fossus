@@ -8,8 +8,11 @@
     "start": "next start"
   },
   "dependencies": {
+    "@fossus/api-types": "*",
     "@fossus/env": "*",
     "@fossus/ui": "*",
+    "@tanstack/react-query": "^5.101.0",
+    "axios": "^1.18.0",
     "babel-plugin-react-compiler": "^1.0.0",
     "dotenv": "^17.2.2",
     "lucide-react": "^0.546.0",

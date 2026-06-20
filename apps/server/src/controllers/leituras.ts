@@ -12,10 +12,7 @@ export async function create(req: Request, res: Response) {
   }
 
   const novaLeitura = await leituraService.create(parsed.data);
-  res.status(201).json({
-    ...novaLeitura,
-    id: Number(novaLeitura.id),
-  });
+  res.status(201).json(novaLeitura);
 }
 
 export async function list(req: Request, res: Response): Promise<void> {

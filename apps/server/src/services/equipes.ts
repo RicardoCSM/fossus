@@ -1,10 +1,29 @@
-import prisma from "@fossus/db";
+import prisma, { Prisma } from "@fossus/db";
+import type { EquipeDto } from "@fossus/api-types";
 import type { CreateEquipeInput, UpdateEquipeInput } from "../schemas/equipes";
 
-export async function create(data: CreateEquipeInput) {
+const EQUIPE_SELECT = {
+  id: true,
+  nome: true,
+  telefones: { select: { telefone: true } },
+} as const;
+
+type EquipeRow = Prisma.equipesGetPayload<{ select: typeof EQUIPE_SELECT }>;
+
+function toEquipeDto(row: EquipeRow): EquipeDto {
+  return {
+    id: row.id,
+    nome: row.nome,
+    telefones: row.telefones
+      .map((telefone) => telefone.telefone)
+      .filter((telefone): telefone is string => telefone !== null),
+  };
+}
+
+export async function create(data: CreateEquipeInput): Promise<EquipeDto> {
   const { nome, telefones } = data;
 
-  return prisma.$transaction(async (tx) => {
+  const created = await prisma.$transaction(async (tx) => {
     const equipe = await tx.equipes.create({
       data: { nome },
     });
@@ -20,46 +39,45 @@ export async function create(data: CreateEquipeInput) {
       });
     }
 
-    return equipe;
+    return tx.equipes.findUniqueOrThrow({
+      where: { id: equipe.id },
+      select: EQUIPE_SELECT,
+    });
   });
+
+  return toEquipeDto(created);
 }
 
-export async function findAll() {
-  return prisma.equipes.findMany({
-    include: {
-      telefones: true,
-    },
-    orderBy: {
-      nome: "asc",
-    },
+export async function findAll(): Promise<EquipeDto[]> {
+  const rows = await prisma.equipes.findMany({
+    select: EQUIPE_SELECT,
+    orderBy: { nome: "asc" },
   });
+  return rows.map(toEquipeDto);
 }
 
-export async function findById(id: number) {
-  return prisma.equipes.findUnique({
-    where: { id },
-    include: {
-      telefones: true,
-    },
-  });
+export async function findById(id: number): Promise<EquipeDto | null> {
+  const row = await prisma.equipes.findUnique({ where: { id }, select: EQUIPE_SELECT });
+  return row ? toEquipeDto(row) : null;
 }
 
-export async function remove(id: number) {
-  const exists = await prisma.equipes.findUnique({ where: { id } });
+export async function remove(id: number): Promise<EquipeDto | null> {
+  const exists = await prisma.equipes.findUnique({ where: { id }, select: EQUIPE_SELECT });
 
   if (!exists) return null;
 
-  return prisma.equipes.delete({ where: { id } });
+  await prisma.equipes.delete({ where: { id } });
+  return toEquipeDto(exists);
 }
 
-export async function update(id: number, data: UpdateEquipeInput) {
+export async function update(id: number, data: UpdateEquipeInput): Promise<EquipeDto | null> {
   const exists = await prisma.equipes.findUnique({
     where: { id },
   });
 
   if (!exists) return null;
 
-  return prisma.$transaction(async (tx) => {
+  const updated = await prisma.$transaction(async (tx) => {
     await tx.equipes.update({
       where: { id },
       data: {
@@ -84,11 +102,11 @@ export async function update(id: number, data: UpdateEquipeInput) {
       }
     }
 
-    return tx.equipes.findUnique({
+    return tx.equipes.findUniqueOrThrow({
       where: { id },
-      include: {
-        telefones: true,
-      },
+      select: EQUIPE_SELECT,
     });
   });
+
+  return toEquipeDto(updated);
 }

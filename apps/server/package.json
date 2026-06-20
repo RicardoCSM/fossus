@@ -10,6 +10,7 @@
     "start": "node dist/index.mjs"
   },
   "dependencies": {
+    "@fossus/api-types": "*",
     "@fossus/db": "*",
     "@fossus/env": "*",
     "cors": "^2.8.5",

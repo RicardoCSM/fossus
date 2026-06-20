@@ -1,0 +1,13 @@
+{
+  "name": "@fossus/api-types",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "devDependencies": {
+    "@fossus/config": "*",
+    "typescript": "^6"
+  }
+}

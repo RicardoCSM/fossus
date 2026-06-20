@@ -16,6 +16,7 @@
     "db:studio": "turbo -F @fossus/db db:studio",
     "db:generate": "turbo -F @fossus/db db:generate",
     "db:migrate": "turbo -F @fossus/db db:migrate",
+    "db:seed": "turbo -F @fossus/db db:seed",
     "db:start": "turbo -F @fossus/db db:start",
     "db:watch": "turbo -F @fossus/db db:watch",
     "db:stop": "turbo -F @fossus/db db:stop",
