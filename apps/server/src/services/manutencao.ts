@@ -1,8 +1,5 @@
 import prisma from "@fossus/db";
-import type {
-  CreateManutencaoInput,
-  UpdateManutencaoInput,
-} from "../schemas/manutencao";
+import type { CreateManutencaoInput, UpdateManutencaoInput } from "../schemas/manutencao";
 
 export async function findAll() {
   return prisma.manutencao.findMany({
@@ -23,11 +20,7 @@ export async function findById(id: number) {
   });
 }
 
-export async function create(
-  bueiroId: number,
-  equipeId: number,
-  data: CreateManutencaoInput
-) {
+export async function create(bueiroId: number, equipeId: number, data: CreateManutencaoInput) {
   return prisma.manutencao.create({
     data: {
       bueiro_id: bueiroId,
@@ -46,10 +39,7 @@ export async function create(
   });
 }
 
-export async function update(
-  id: number,
-  data: UpdateManutencaoInput
-) {
+export async function update(id: number, data: UpdateManutencaoInput) {
   const manutencao = await findById(id);
 
   if (!manutencao) {

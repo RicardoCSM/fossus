@@ -5,6 +5,6 @@ export const manutencaoRouter = Router();
 
 manutencaoRouter.get("/", manutencaoController.list);
 manutencaoRouter.get("/:id", manutencaoController.getById);
-manutencaoRouter.post("/bueiro/:bueiroId",manutencaoController.create);
-manutencaoRouter.put("/:id",manutencaoController.update);
-manutencaoRouter.delete("/:id",manutencaoController.remove);
+manutencaoRouter.post("/bueiro/:bueiroId", manutencaoController.create);
+manutencaoRouter.put("/:id", manutencaoController.update);
+manutencaoRouter.delete("/:id", manutencaoController.remove);

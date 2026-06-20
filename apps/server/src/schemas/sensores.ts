@@ -11,11 +11,8 @@ export const createSensorSchema = z.object({
   status: z.string().min(1).max(30),
 });
 
-export const updateSensorSchema =
-  createSensorSchema.partial();
+export const updateSensorSchema = createSensorSchema.partial();
 
-export type CreateSensorInput =
-  z.infer<typeof createSensorSchema>;
+export type CreateSensorInput = z.infer<typeof createSensorSchema>;
 
-export type UpdateSensorInput =
-  z.infer<typeof updateSensorSchema>;
+export type UpdateSensorInput = z.infer<typeof updateSensorSchema>;

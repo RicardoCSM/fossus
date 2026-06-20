@@ -1,24 +1,15 @@
 import type { Request, Response } from "express";
 import * as manutencaoService from "../services/manutencao";
-import {
-  createManutencaoSchema,
-  updateManutencaoSchema,
-} from "../schemas/manutencao";
+import { createManutencaoSchema, updateManutencaoSchema } from "../schemas/manutencao";
 import parseId from "@/lib/parseId";
 
-export async function list(
-  _req: Request,
-  res: Response
-): Promise<void> {
+export async function list(_req: Request, res: Response): Promise<void> {
   const manutencoes = await manutencaoService.findAll();
 
   res.json(manutencoes);
 }
 
-export async function getById(
-  req: Request,
-  res: Response
-): Promise<void> {
+export async function getById(req: Request, res: Response): Promise<void> {
   const id = parseId(req.params.id);
 
   if (id === null) {
@@ -40,10 +31,7 @@ export async function getById(
   res.json(manutencao);
 }
 
-export async function create(
-  req: Request,
-  res: Response
-): Promise<void> {
+export async function create(req: Request, res: Response): Promise<void> {
   const bueiroId = parseId(req.params.bueiroId);
 
   if (bueiroId === null) {
@@ -63,19 +51,12 @@ export async function create(
     return;
   }
 
-  const manutencao = await manutencaoService.create(
-    bueiroId,
-    parsed.data.equipe_id,
-    parsed.data
-  );
+  const manutencao = await manutencaoService.create(bueiroId, parsed.data.equipe_id, parsed.data);
 
   res.status(201).json(manutencao);
 }
 
-export async function update(
-  req: Request,
-  res: Response
-): Promise<void> {
+export async function update(req: Request, res: Response): Promise<void> {
   const id = parseId(req.params.id);
 
   if (id === null) {
@@ -95,10 +76,7 @@ export async function update(
     return;
   }
 
-  const manutencao = await manutencaoService.update(
-    id,
-    parsed.data
-  );
+  const manutencao = await manutencaoService.update(id, parsed.data);
 
   if (!manutencao) {
     res.status(404).json({
@@ -110,10 +88,7 @@ export async function update(
   res.json(manutencao);
 }
 
-export async function remove(
-  req: Request,
-  res: Response
-): Promise<void> {
+export async function remove(req: Request, res: Response): Promise<void> {
   const id = parseId(req.params.id);
 
   if (id === null) {

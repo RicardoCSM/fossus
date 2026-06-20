@@ -1,8 +1,5 @@
 import prisma from "@fossus/db";
-import type {
-  CreateTipoAlertaInput,
-  UpdateTipoAlertaInput,
-} from "../schemas/tipos-alerta";
+import type { CreateTipoAlertaInput, UpdateTipoAlertaInput } from "../schemas/tipos-alerta";
 
 export async function findAll() {
   return prisma.tipos_alerta.findMany({

@@ -1,9 +1,6 @@
 import type { Request, Response } from "express";
 import * as tipoAlertaService from "../services/tipos-alerta";
-import {
-  createTipoAlertaSchema,
-  updateTipoAlertaSchema,
-} from "../schemas/tipos-alerta";
+import { createTipoAlertaSchema, updateTipoAlertaSchema } from "../schemas/tipos-alerta";
 import parseId from "@/lib/parseId";
 
 export async function list(_req: Request, res: Response): Promise<void> {

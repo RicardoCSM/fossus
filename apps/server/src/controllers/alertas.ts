@@ -1,9 +1,6 @@
 import type { Request, Response } from "express";
 import * as alertaService from "../services/alertas";
-import {
-  createAlertaSchema,
-  updateAlertaSchema,
-} from "../schemas/alertas";
+import { createAlertaSchema, updateAlertaSchema } from "../schemas/alertas";
 import parseId from "@/lib/parseId";
 
 export async function list(req: Request, res: Response): Promise<void> {
@@ -13,7 +10,7 @@ export async function list(req: Request, res: Response): Promise<void> {
 
     const result = await alertaService.findAll(page, limit);
     res.json(result);
-  } catch (error) {
+  } catch {
     res.status(500).json({ message: "Erro ao buscar alertas." });
   }
 }
@@ -79,10 +76,7 @@ export async function update(req: Request, res: Response): Promise<void> {
   res.json(alerta);
 }
 
-export async function findByBueiroId(
-  req: Request,
-  res: Response,
-): Promise<void> {
+export async function findByBueiroId(req: Request, res: Response): Promise<void> {
   const bueiroId = parseId(req.params.bueiroId);
 
   if (bueiroId === null) {
@@ -96,9 +90,7 @@ export async function findByBueiroId(
 
     const result = await alertaService.findByBueiroId(bueiroId, page, limit);
     res.json(result);
-  } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Erro ao buscar alertas do bueiro." });
+  } catch {
+    res.status(500).json({ message: "Erro ao buscar alertas do bueiro." });
   }
 }

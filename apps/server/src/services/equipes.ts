@@ -1,5 +1,3 @@
-
-
 import prisma from "@fossus/db";
 import type { CreateEquipeInput, UpdateEquipeInput } from "../schemas/equipes";
 
@@ -7,13 +5,11 @@ export async function create(data: CreateEquipeInput) {
   const { nome, telefones } = data;
 
   return prisma.$transaction(async (tx) => {
-    
     const equipe = await tx.equipes.create({
       data: { nome },
     });
 
     if (telefones && telefones.length > 0) {
-      
       const telefonesData = telefones.map((tel) => ({
         equipe_id: equipe.id,
         telefone: tel,
@@ -31,35 +27,32 @@ export async function create(data: CreateEquipeInput) {
 export async function findAll() {
   return prisma.equipes.findMany({
     include: {
-      telefones: true, 
+      telefones: true,
     },
     orderBy: {
-      nome: "asc", 
+      nome: "asc",
     },
   });
 }
 
-export async function findById(id:number) {
-    return prisma.equipes.findUnique({
-        where:{id},
-        include: {
-            telefones: true
-        }
-    })
+export async function findById(id: number) {
+  return prisma.equipes.findUnique({
+    where: { id },
+    include: {
+      telefones: true,
+    },
+  });
 }
 
 export async function remove(id: number) {
-    const exists = await prisma.equipes.findUnique({where: {id}})
+  const exists = await prisma.equipes.findUnique({ where: { id } });
 
-    if (!exists) return null
+  if (!exists) return null;
 
-    return prisma.equipes.delete({where: {id}})
+  return prisma.equipes.delete({ where: { id } });
 }
 
-export async function update(
-  id: number,
-  data: UpdateEquipeInput
-) {
+export async function update(id: number, data: UpdateEquipeInput) {
   const exists = await prisma.equipes.findUnique({
     where: { id },
   });

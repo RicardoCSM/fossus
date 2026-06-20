@@ -9,11 +9,8 @@ export const createManutencaoSchema = z.object({
   status: z.string().min(1).max(30).optional(),
   descricao: z.string().optional(),
 });
-export const updateManutencaoSchema =
-  createManutencaoSchema.partial();
+export const updateManutencaoSchema = createManutencaoSchema.partial();
 
-export type CreateManutencaoInput =
-  z.infer<typeof createManutencaoSchema>;
+export type CreateManutencaoInput = z.infer<typeof createManutencaoSchema>;
 
-export type UpdateManutencaoInput =
-  z.infer<typeof updateManutencaoSchema>;
+export type UpdateManutencaoInput = z.infer<typeof updateManutencaoSchema>;

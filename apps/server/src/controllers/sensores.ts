@@ -1,10 +1,9 @@
 import type { Request, Response } from "express";
-import { createSensorSchema, updateSensorSchema} from "../schemas/sensores";
+import { createSensorSchema, updateSensorSchema } from "../schemas/sensores";
 import * as sensorService from "../services/sensores";
 
-
-export async function create(req:Request, res: Response) {
-    const parsed = createSensorSchema.safeParse(req.body)
+export async function create(req: Request, res: Response) {
+  const parsed = createSensorSchema.safeParse(req.body);
 
   if (!parsed.success) {
     res.status(400).json({
@@ -14,50 +13,48 @@ export async function create(req:Request, res: Response) {
     return;
   }
 
-  const sensor = await sensorService.create(parsed.data)
+  const sensor = await sensorService.create(parsed.data);
 
-  res.status(201).json(sensor)
-    
+  res.status(201).json(sensor);
 }
 
-export async function update(req: Request, res: Response){
-  const id = Number(req.params.id)
+export async function update(req: Request, res: Response) {
+  const id = Number(req.params.id);
 
-  const data = updateSensorSchema.parse(req.body)
-  
-  const sensor = await sensorService.update(id, data)
+  const data = updateSensorSchema.parse(req.body);
 
-  res.json(sensor)
+  const sensor = await sensorService.update(id, data);
+
+  res.json(sensor);
 }
 
-export async function list(_req: Request, res: Response): Promise<void>{
-  const sensores = await sensorService.findAll()
-  res.json(sensores)
+export async function list(_req: Request, res: Response): Promise<void> {
+  const sensores = await sensorService.findAll();
+  res.json(sensores);
 }
 
 export async function remove(req: Request, res: Response): Promise<void> {
+  const id = Number(req.params.id);
 
-    const id = Number(req.params.id)
-    
-    const sensor = await sensorService.remove(id)
+  const sensor = await sensorService.remove(id);
 
-    if (!sensor) {
-      res.status(404).json({ message: 'Sensor não encontrado.' })
-      return
-    }
+  if (!sensor) {
+    res.status(404).json({ message: "Sensor não encontrado." });
+    return;
+  }
 
-    res.json(sensor)
+  res.json(sensor);
 }
 
 export async function getById(req: Request, res: Response) {
-  const id = Number(req.params.id)
+  const id = Number(req.params.id);
 
-  const sensor = await sensorService.findById(id)
+  const sensor = await sensorService.findById(id);
 
-  if (!sensor){
-    res.status(404).json({message: "Sensor não encontrado"})
-    return
+  if (!sensor) {
+    res.status(404).json({ message: "Sensor não encontrado" });
+    return;
   }
 
-  res.json(sensor)
+  res.json(sensor);
 }
