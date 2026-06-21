@@ -3,6 +3,10 @@ import { z } from "zod";
 export const createBueiroSchema = z.object({
   rua: z.string().min(1).max(100),
   numero: z.number().int().optional(),
+  complemento: z.string().max(100).optional(),
+  bairro: z.string().max(100).optional(),
+  cidade: z.string().min(1).max(100).default("Caratinga"),
+  estado: z.string().length(2).default("MG"),
   cep: z.string().max(10).optional(),
   latitude: z.number().optional(),
   longitude: z.number().optional(),

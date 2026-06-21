@@ -47,6 +47,10 @@
     },
     "db:seed": {
       "cache": false
+    },
+    "db:simulate": {
+      "cache": false,
+      "persistent": true
     }
   }
 }

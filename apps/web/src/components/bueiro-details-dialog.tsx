@@ -48,6 +48,18 @@ export function BueiroDetailsDialog({ bueiro, onOpenChange }: BueiroDetailsDialo
 
             <dl className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
               <div>
+                <dt className="text-xs text-muted-foreground">Bairro</dt>
+                <dd>{bueiro.endereco.bairro ?? "—"}</dd>
+              </div>
+
+              <div>
+                <dt className="text-xs text-muted-foreground">Cidade/UF</dt>
+                <dd>
+                  {bueiro.endereco.cidade}/{bueiro.endereco.estado}
+                </dd>
+              </div>
+
+              <div>
                 <dt className="text-xs text-muted-foreground">CEP</dt>
                 <dd>{bueiro.endereco.cep ?? "—"}</dd>
               </div>

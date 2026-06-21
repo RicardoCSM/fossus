@@ -52,6 +52,10 @@ export function CreateBueiroDialog({ refetch }: CreateBueiroDialogProps) {
     defaultValues: {
       rua: "",
       numero: 0,
+      complemento: "",
+      bairro: "",
+      cidade: "Caratinga",
+      estado: "MG",
       cep: "",
       latitude: 0,
       longitude: 0,
@@ -152,6 +156,43 @@ export function CreateBueiroDialog({ refetch }: CreateBueiroDialogProps) {
                 )}
               />
               <Controller
+                name="complemento"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="bueiro-complemento">Complemento</FieldLabel>
+                    <Input
+                      {...field}
+                      id="bueiro-complemento"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Em frente à praça"
+                      autoComplete="off"
+                    />
+                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  </Field>
+                )}
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <Controller
+                name="bairro"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="bueiro-bairro">Bairro</FieldLabel>
+                    <Input
+                      {...field}
+                      id="bueiro-bairro"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Centro"
+                      autoComplete="off"
+                    />
+                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  </Field>
+                )}
+              />
+              <Controller
                 name="cep"
                 control={form.control}
                 render={({ field, fieldState }) => (
@@ -164,6 +205,44 @@ export function CreateBueiroDialog({ refetch }: CreateBueiroDialogProps) {
                       placeholder="35400-000"
                       autoComplete="off"
                       maxLength={10}
+                    />
+                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  </Field>
+                )}
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <Controller
+                name="cidade"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="bueiro-cidade">Cidade</FieldLabel>
+                    <Input
+                      {...field}
+                      id="bueiro-cidade"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Caratinga"
+                      autoComplete="off"
+                    />
+                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="estado"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="bueiro-estado">UF</FieldLabel>
+                    <Input
+                      {...field}
+                      id="bueiro-estado"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="MG"
+                      autoComplete="off"
+                      maxLength={2}
                     />
                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                   </Field>

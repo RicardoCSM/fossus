@@ -16,6 +16,7 @@
     "postinstall": "prisma generate",
     "db:studio": "prisma studio",
     "db:seed": "prisma db seed",
+    "db:simulate": "tsx scripts/simulate-leituras.ts",
     "db:start": "docker compose up -d",
     "db:watch": "docker compose up",
     "db:stop": "docker compose stop",

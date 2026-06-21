@@ -2,6 +2,10 @@ CREATE TABLE enderecos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     rua VARCHAR(100) NOT NULL,
     numero INT,
+    complemento VARCHAR(100),
+    bairro VARCHAR(100),
+    cidade VARCHAR(100) NOT NULL DEFAULT 'Caratinga',
+    estado VARCHAR(2) NOT NULL DEFAULT 'MG',
     cep VARCHAR(10),
     latitude DECIMAL(10,8),
     longitude DECIMAL(11,8)

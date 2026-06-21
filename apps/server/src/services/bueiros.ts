@@ -19,6 +19,10 @@ const BUEIRO_SELECT = {
       id: true,
       rua: true,
       numero: true,
+      complemento: true,
+      bairro: true,
+      cidade: true,
+      estado: true,
       cep: true,
       latitude: true,
       longitude: true,
@@ -48,6 +52,10 @@ function toBueiroDto(row: BueiroRow): BueiroDto {
       id: row.enderecos.id,
       rua: row.enderecos.rua,
       numero: row.enderecos.numero,
+      complemento: row.enderecos.complemento,
+      bairro: row.enderecos.bairro,
+      cidade: row.enderecos.cidade,
+      estado: row.enderecos.estado,
       cep: row.enderecos.cep,
       latitude: toNumber(row.enderecos.latitude),
       longitude: toNumber(row.enderecos.longitude),
@@ -72,11 +80,23 @@ export async function findById(id: number): Promise<BueiroDto | null> {
 }
 
 export async function create(data: CreateBueiroInput): Promise<BueiroDto> {
-  const { rua, numero, cep, latitude, longitude, data_instalacao, ...rest } = data;
+  const {
+    rua,
+    numero,
+    complemento,
+    bairro,
+    cidade,
+    estado,
+    cep,
+    latitude,
+    longitude,
+    data_instalacao,
+    ...rest
+  } = data;
 
   const created = await prisma.$transaction(async (tx) => {
     const endereco = await tx.enderecos.create({
-      data: { rua, numero, cep, latitude, longitude },
+      data: { rua, numero, complemento, bairro, cidade, estado, cep, latitude, longitude },
     });
 
     return tx.bueiros.create({
@@ -92,10 +112,32 @@ export async function create(data: CreateBueiroInput): Promise<BueiroDto> {
   return toBueiroDto(created);
 }
 
-const ENDERECO_FIELDS = ["rua", "numero", "cep", "latitude", "longitude"] as const;
+const ENDERECO_FIELDS = [
+  "rua",
+  "numero",
+  "complemento",
+  "bairro",
+  "cidade",
+  "estado",
+  "cep",
+  "latitude",
+  "longitude",
+] as const;
 
 export async function update(id: number, data: UpdateBueiroInput): Promise<BueiroDto | null> {
-  const { rua, numero, cep, latitude, longitude, data_instalacao, ...rest } = data;
+  const {
+    rua,
+    numero,
+    complemento,
+    bairro,
+    cidade,
+    estado,
+    cep,
+    latitude,
+    longitude,
+    data_instalacao,
+    ...rest
+  } = data;
 
   const updated = await prisma.$transaction(async (tx) => {
     const bueiro = await tx.bueiros.findUnique({ where: { id } });
@@ -106,7 +148,7 @@ export async function update(id: number, data: UpdateBueiroInput): Promise<Bueir
     if (hasEnderecoChanges) {
       await tx.enderecos.update({
         where: { id: bueiro.endereco_id },
-        data: { rua, numero, cep, latitude, longitude },
+        data: { rua, numero, complemento, bairro, cidade, estado, cep, latitude, longitude },
       });
     }
 

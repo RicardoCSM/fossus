@@ -3,11 +3,17 @@
 import { useState } from "react";
 
 import type { BueiroDto, BueiroStatus } from "@fossus/api-types";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@fossus/ui/components/collapsible";
 import { Map, MapMarker, MarkerContent, MarkerTooltip } from "@fossus/ui/components/ui/map";
 import { useQuery } from "@tanstack/react-query";
-import { FlagTriangleRight } from "lucide-react";
+import { ChevronDown, FlagTriangleRight } from "lucide-react";
 
 import { fetchBueirosList } from "@/actions/bueiros";
+import { BairrosStatusChart } from "@/components/bairros-status-chart";
 import { BueiroDetailsDialog } from "@/components/bueiro-details-dialog";
 import { BueiroStatusColors, BueiroStatusLabels } from "@/constants/bueiro-status";
 import { CreateBueiroDialog } from "@/components/create-bueiro-dialog";
@@ -44,45 +50,53 @@ export default function Home() {
 
   return (
     <Map
-      center={[-42.140325, -19.790048]}
+      center={[-42.14172, -19.79159]}
       zoom={15}
       styles={{
         light: "https://tiles.stadiamaps.com/styles/alidade_smooth.json",
       }}
     >
       <div className="absolute top-2 left-2 right-2 z-10 flex flex-wrap items-start justify-between gap-2 sm:top-4 sm:left-4 sm:right-4">
-        <div className="rounded-xl border border-border bg-background p-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-background">
-          <div className="mb-3 text-sm font-medium text-foreground">Rede de Drenagem</div>
+        <Collapsible
+          defaultOpen
+          className="rounded-xl border border-border bg-background dark:border-input dark:bg-background"
+        >
+          <CollapsibleTrigger className="group flex w-full items-center justify-between gap-2 p-4 text-left text-sm font-medium text-foreground">
+            Rede de Drenagem
+            <ChevronDown className="size-4 shrink-0 text-muted-foreground transition-transform duration-200 group-data-open:rotate-180" />
+          </CollapsibleTrigger>
 
-          <div className="grid grid-cols-3 gap-4">
-            <div>
-              <div className={`text-xl font-semibold ${BueiroStatusColors.normal.text}`}>
-                {counts.normal}
+          <CollapsibleContent className="px-4 pb-4">
+            <div className="grid grid-cols-3 gap-4">
+              <div>
+                <div className={`text-xl font-semibold ${BueiroStatusColors.normal.text}`}>
+                  {counts.normal}
+                </div>
+                <div className="text-xs text-muted-foreground">Normais</div>
               </div>
-              <div className="text-xs text-muted-foreground">Normais</div>
-            </div>
 
-            <div>
-              <div className={`text-xl font-semibold ${BueiroStatusColors.warning.text}`}>
-                {counts.warning}
+              <div>
+                <div className={`text-xl font-semibold ${BueiroStatusColors.warning.text}`}>
+                  {counts.warning}
+                </div>
+                <div className="text-xs text-muted-foreground">Alertas</div>
               </div>
-              <div className="text-xs text-muted-foreground">Alertas</div>
-            </div>
 
-            <div>
-              <div className={`text-xl font-semibold ${BueiroStatusColors.critical.text}`}>
-                {counts.critical}
+              <div>
+                <div className={`text-xl font-semibold ${BueiroStatusColors.critical.text}`}>
+                  {counts.critical}
+                </div>
+                <div className="text-xs text-muted-foreground">Críticos</div>
               </div>
-              <div className="text-xs text-muted-foreground">Críticos</div>
             </div>
-          </div>
 
-          {dataUpdatedAt > 0 && (
-            <div className="mt-3 border-t border-border pt-3 text-xs text-muted-foreground">
-              Atualizado às {new Date(dataUpdatedAt).toLocaleTimeString("pt-BR")}
-            </div>
-          )}
-        </div>
+            {dataUpdatedAt > 0 && (
+              <div className="mt-3 border-t border-border pt-3 text-xs text-muted-foreground">
+                Atualizado às {new Date(dataUpdatedAt).toLocaleTimeString("pt-BR")}
+              </div>
+            )}
+          </CollapsibleContent>
+        </Collapsible>
 
         <div className="rounded-lg bg-background">
           <CreateBueiroDialog refetch={refetch} />
@@ -125,6 +139,10 @@ export default function Home() {
           </MapMarker>
         );
       })}
+
+      <div className="absolute bottom-2 left-2 z-10 w-full max-w-sm sm:bottom-4 sm:left-4">
+        <BairrosStatusChart bueiros={bueiros} />
+      </div>
 
       <BueiroDetailsDialog
         bueiro={selectedBueiro}

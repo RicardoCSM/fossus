@@ -50,6 +50,10 @@ function toDefaultValues(bueiro: BueiroDto): BueiroInput {
   return {
     rua: bueiro.endereco.rua,
     numero: bueiro.endereco.numero ?? undefined,
+    complemento: bueiro.endereco.complemento ?? undefined,
+    bairro: bueiro.endereco.bairro ?? undefined,
+    cidade: bueiro.endereco.cidade,
+    estado: bueiro.endereco.estado,
     cep: bueiro.endereco.cep ?? undefined,
     latitude: bueiro.endereco.latitude ?? undefined,
     longitude: bueiro.endereco.longitude ?? undefined,
@@ -160,6 +164,43 @@ export function EditBueiroDialog({ bueiro, refetch }: EditBueiroDialogProps) {
                 )}
               />
               <Controller
+                name="complemento"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="edit-bueiro-complemento">Complemento</FieldLabel>
+                    <Input
+                      {...field}
+                      id="edit-bueiro-complemento"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Em frente à praça"
+                      autoComplete="off"
+                    />
+                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  </Field>
+                )}
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <Controller
+                name="bairro"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="edit-bueiro-bairro">Bairro</FieldLabel>
+                    <Input
+                      {...field}
+                      id="edit-bueiro-bairro"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Centro"
+                      autoComplete="off"
+                    />
+                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  </Field>
+                )}
+              />
+              <Controller
                 name="cep"
                 control={form.control}
                 render={({ field, fieldState }) => (
@@ -172,6 +213,44 @@ export function EditBueiroDialog({ bueiro, refetch }: EditBueiroDialogProps) {
                       placeholder="35400-000"
                       autoComplete="off"
                       maxLength={10}
+                    />
+                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  </Field>
+                )}
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <Controller
+                name="cidade"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="edit-bueiro-cidade">Cidade</FieldLabel>
+                    <Input
+                      {...field}
+                      id="edit-bueiro-cidade"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Caratinga"
+                      autoComplete="off"
+                    />
+                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="estado"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="edit-bueiro-estado">UF</FieldLabel>
+                    <Input
+                      {...field}
+                      id="edit-bueiro-estado"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="MG"
+                      autoComplete="off"
+                      maxLength={2}
                     />
                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                   </Field>

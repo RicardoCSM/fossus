@@ -41,13 +41,17 @@ model bueiros {
 }
 
 model enderecos {
-  id        Int       @id @default(autoincrement())
-  rua       String    @db.VarChar(100)
-  numero    Int?
-  cep       String?   @db.VarChar(10)
-  latitude  Decimal?  @db.Decimal(10, 8)
-  longitude Decimal?  @db.Decimal(11, 8)
-  bueiros   bueiros[]
+  id          Int       @id @default(autoincrement())
+  rua         String    @db.VarChar(100)
+  numero      Int?
+  complemento String?   @db.VarChar(100)
+  bairro      String?   @db.VarChar(100)
+  cidade      String    @default("Caratinga") @db.VarChar(100)
+  estado      String    @default("MG") @db.VarChar(2)
+  cep         String?   @db.VarChar(10)
+  latitude    Decimal?  @db.Decimal(10, 8)
+  longitude   Decimal?  @db.Decimal(11, 8)
+  bueiros     bueiros[]
 }
 
 model equipes {
