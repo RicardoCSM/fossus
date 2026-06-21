@@ -20,6 +20,17 @@ export async function fetchManutencoesList(): Promise<ActionResult<ManutencaoDto
   }
 }
 
+export async function fetchManutencoesByBueiro(
+  bueiroId: number,
+): Promise<ActionResult<ManutencaoDto[]>> {
+  try {
+    const response = await http.get<ManutencaoDto[]>(`/manutencoes/bueiro/${bueiroId}`);
+    return { success: true, data: response.data };
+  } catch (e) {
+    return actionError(e, "Erro ao buscar manutenções do bueiro.");
+  }
+}
+
 export async function fetchManutencao(id: number): Promise<ActionResult<ManutencaoDto>> {
   try {
     const response = await http.get<ManutencaoDto>(`/manutencoes/${id}`);

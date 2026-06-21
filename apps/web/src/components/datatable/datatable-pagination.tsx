@@ -22,7 +22,7 @@ export function DataTablePagination<TData>({
   pageSizeOptions = [10, 20, 30, 40, 50],
 }: DataTablePaginationProps<TData>) {
   return (
-    <div className="flex w-full flex-col-reverse items-center justify-between gap-4 overflow-auto p-1 lg:flex-row lg:gap-8">
+    <div className="flex w-full min-w-0 flex-col-reverse items-center justify-between gap-4 overflow-auto p-1 lg:flex-row lg:gap-8">
       <div className="flex-1 whitespace-nowrap text-sm text-muted-foreground">
         Exibindo {table.getFilteredRowModel().rows.length} de {table.getRowCount()} registros
         disponíveis.

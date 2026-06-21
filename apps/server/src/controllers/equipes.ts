@@ -1,11 +1,10 @@
 import type { Request, Response } from "express";
-import { createEquipeSchema } from "../schemas/equipes";
+import { createEquipeSchema, updateEquipeSchema } from "../schemas/equipes";
 import * as equipeService from "../services/equipes";
+import parseId from "@/lib/parseId";
 
 export async function create(req: Request, res: Response): Promise<void> {
   const parsed = createEquipeSchema.safeParse(req.body);
-
-  console.log(parsed);
 
   if (!parsed.success) {
     res.status(400).json({
@@ -29,8 +28,13 @@ export async function list(_req: Request, res: Response): Promise<void> {
   }
 }
 
-export async function getById(req: Request, res: Response) {
-  const id = Number(req.params.id);
+export async function getById(req: Request, res: Response): Promise<void> {
+  const id = parseId(req.params.id);
+
+  if (id === null) {
+    res.status(400).json({ message: "ID inválido" });
+    return;
+  }
 
   const equipe = await equipeService.findById(id);
 
@@ -42,8 +46,13 @@ export async function getById(req: Request, res: Response) {
   res.json(equipe);
 }
 
-export async function remove(req: Request, res: Response) {
-  const id = Number(req.params.id);
+export async function remove(req: Request, res: Response): Promise<void> {
+  const id = parseId(req.params.id);
+
+  if (id === null) {
+    res.status(400).json({ message: "ID inválido" });
+    return;
+  }
 
   const equipe = await equipeService.remove(id);
 
@@ -55,10 +64,13 @@ export async function remove(req: Request, res: Response) {
   res.json(equipe);
 }
 
-import { updateEquipeSchema } from "../schemas/equipes";
-
 export async function update(req: Request, res: Response): Promise<void> {
-  const id = Number(req.params.id);
+  const id = parseId(req.params.id);
+
+  if (id === null) {
+    res.status(400).json({ message: "ID inválido" });
+    return;
+  }
 
   const parsed = updateEquipeSchema.safeParse(req.body);
 

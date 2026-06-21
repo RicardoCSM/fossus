@@ -47,6 +47,14 @@ export async function findById(id: number): Promise<ManutencaoDto | null> {
   return row ? toManutencaoDto(row) : null;
 }
 
+export async function findByBueiroId(bueiroId: number): Promise<ManutencaoDto[]> {
+  const rows = await prisma.manutencao.findMany({
+    where: { bueiro_id: bueiroId },
+    select: MANUTENCAO_SELECT,
+  });
+  return rows.map(toManutencaoDto);
+}
+
 export async function create(
   bueiroId: number,
   equipeId: number,

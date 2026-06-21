@@ -50,8 +50,8 @@ export default function Home() {
         light: "https://tiles.stadiamaps.com/styles/alidade_smooth.json",
       }}
     >
-      <div className="absolute top-4 left-4 z-10 rounded-xl bg-background">
-        <div className="rounded-xl border border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 p-4 ">
+      <div className="absolute top-2 left-2 right-2 z-10 flex flex-wrap items-start justify-between gap-2 sm:top-4 sm:left-4 sm:right-4">
+        <div className="rounded-xl border border-border bg-background p-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-background">
           <div className="mb-3 text-sm font-medium text-foreground">Rede de Drenagem</div>
 
           <div className="grid grid-cols-3 gap-4">
@@ -83,10 +83,10 @@ export default function Home() {
             </div>
           )}
         </div>
-      </div>
 
-      <div className="absolute top-2 right-2 z-10 bg-background rounded-lg">
-        <CreateBueiroDialog refetch={refetch} />
+        <div className="rounded-lg bg-background">
+          <CreateBueiroDialog refetch={refetch} />
+        </div>
       </div>
 
       {bueiros.filter(hasCoordinates).map((bueiro) => {

@@ -31,6 +31,18 @@ export async function getById(req: Request, res: Response): Promise<void> {
   res.json(manutencao);
 }
 
+export async function findByBueiroId(req: Request, res: Response): Promise<void> {
+  const bueiroId = parseId(req.params.bueiroId);
+
+  if (bueiroId === null) {
+    res.status(400).json({ message: "ID do bueiro inválido" });
+    return;
+  }
+
+  const manutencoes = await manutencaoService.findByBueiroId(bueiroId);
+  res.json(manutencoes);
+}
+
 export async function create(req: Request, res: Response): Promise<void> {
   const bueiroId = parseId(req.params.bueiroId);
 

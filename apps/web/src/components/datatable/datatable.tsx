@@ -31,20 +31,20 @@ export function DataTable<TData>({
 }: DataTableProps<TData>) {
   return (
     <div
-      className={cn("flex w-full h-full flex-col justify-between space-y-6", className)}
+      className={cn("flex w-full min-w-0 h-full flex-col justify-between space-y-6", className)}
       {...props}
     >
       {children}
       <div
         className={cn(
-          "flex flex-col flex-1",
+          "flex flex-col flex-1 min-w-0",
           (table.getRowModel().rows?.length <= 0 || isLoading) && "items-center justify-center",
         )}
       >
         {isLoading ? (
           <LoaderCircle className="m-4 h-8 w-8 animate-spin text-tenant-primary" />
         ) : table.getRowModel().rows?.length > 0 ? (
-          <div className="px-4 md:px-0">
+          <div className="px-4 md:px-0 w-full min-w-0">
             <div className="border rounded-md">
               <Table>
                 <TableHeader>
