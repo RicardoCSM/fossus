@@ -22,15 +22,9 @@ export function ModeToggle() {
         <span className="sr-only">Alternar tema</span>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme("light")}>
-          Claro
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>
-          Escuro
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>
-          Sistema
-        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("light")}>Claro</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("dark")}>Escuro</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("system")}>Sistema</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

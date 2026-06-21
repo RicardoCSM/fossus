@@ -35,7 +35,11 @@ export async function createManutencao(
 ): Promise<ActionResult<ManutencaoDto>> {
   const parsed = manutencaoSchema.safeParse(data);
   if (!parsed.success) {
-    return { success: false, message: "Dados inválidos", errors: zodIssuesToErrors(parsed.error.issues) };
+    return {
+      success: false,
+      message: "Dados inválidos",
+      errors: zodIssuesToErrors(parsed.error.issues),
+    };
   }
 
   try {
@@ -52,7 +56,11 @@ export async function updateManutencao(
 ): Promise<ActionResult<ManutencaoDto>> {
   const parsed = updateManutencaoSchema.safeParse(data);
   if (!parsed.success) {
-    return { success: false, message: "Dados inválidos", errors: zodIssuesToErrors(parsed.error.issues) };
+    return {
+      success: false,
+      message: "Dados inválidos",
+      errors: zodIssuesToErrors(parsed.error.issues),
+    };
   }
 
   try {

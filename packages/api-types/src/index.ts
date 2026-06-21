@@ -1,6 +1,7 @@
 export * from "./alertas";
 export * from "./bueiros";
 export * from "./common";
+export * from "./dashboard";
 export * from "./enderecos";
 export * from "./equipes";
 export * from "./leituras";

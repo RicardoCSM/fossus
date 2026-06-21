@@ -24,6 +24,22 @@ export async function getById(req: Request, res: Response): Promise<void> {
   res.json(bueiro);
 }
 
+export async function dashboard(req: Request, res: Response): Promise<void> {
+  const id = parseId(req.params.id);
+  if (id === null) {
+    res.status(400).json({ message: "ID inválido" });
+    return;
+  }
+
+  const dashboard = await bueiroService.getDashboard(id);
+  if (!dashboard) {
+    res.status(404).json({ message: "Bueiro não encontrado" });
+    return;
+  }
+
+  res.json(dashboard);
+}
+
 export async function create(req: Request, res: Response): Promise<void> {
   const parsed = createBueiroSchema.safeParse(req.body);
   if (!parsed.success) {

@@ -32,7 +32,11 @@ export async function fetchEquipe(id: number): Promise<ActionResult<EquipeDto>> 
 export async function createEquipe(data: EquipeInput): Promise<ActionResult<EquipeDto>> {
   const parsed = equipeSchema.safeParse(data);
   if (!parsed.success) {
-    return { success: false, message: "Dados inválidos", errors: zodIssuesToErrors(parsed.error.issues) };
+    return {
+      success: false,
+      message: "Dados inválidos",
+      errors: zodIssuesToErrors(parsed.error.issues),
+    };
   }
 
   try {
@@ -49,7 +53,11 @@ export async function updateEquipe(
 ): Promise<ActionResult<EquipeDto>> {
   const parsed = updateEquipeSchema.safeParse(data);
   if (!parsed.success) {
-    return { success: false, message: "Dados inválidos", errors: zodIssuesToErrors(parsed.error.issues) };
+    return {
+      success: false,
+      message: "Dados inválidos",
+      errors: zodIssuesToErrors(parsed.error.issues),
+    };
   }
 
   try {

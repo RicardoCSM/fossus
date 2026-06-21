@@ -52,7 +52,11 @@ export async function fetchAlerta(id: number): Promise<ActionResult<AlertaDto>> 
 export async function createAlerta(data: AlertaInput): Promise<ActionResult<AlertaDto>> {
   const parsed = alertaSchema.safeParse(data);
   if (!parsed.success) {
-    return { success: false, message: "Dados inválidos", errors: zodIssuesToErrors(parsed.error.issues) };
+    return {
+      success: false,
+      message: "Dados inválidos",
+      errors: zodIssuesToErrors(parsed.error.issues),
+    };
   }
 
   try {
@@ -69,7 +73,11 @@ export async function updateAlerta(
 ): Promise<ActionResult<AlertaDto>> {
   const parsed = updateAlertaSchema.safeParse(data);
   if (!parsed.success) {
-    return { success: false, message: "Dados inválidos", errors: zodIssuesToErrors(parsed.error.issues) };
+    return {
+      success: false,
+      message: "Dados inválidos",
+      errors: zodIssuesToErrors(parsed.error.issues),
+    };
   }
 
   try {

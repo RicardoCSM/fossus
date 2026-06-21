@@ -12,10 +12,8 @@ import {
   DialogTitle,
 } from "@fossus/ui/components/dialog";
 
-import {
-  BueiroStatusColors,
-  BueiroStatusLabels,
-} from "@/constants/bueiro-status";
+import { BueiroStatusColors, BueiroStatusLabels } from "@/constants/bueiro-status";
+import Link from "next/link";
 
 function formatDate(value: string | null) {
   if (!value) return "—";
@@ -31,10 +29,7 @@ interface BueiroDetailsDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
-export function BueiroDetailsDialog({
-  bueiro,
-  onOpenChange,
-}: BueiroDetailsDialogProps) {
+export function BueiroDetailsDialog({ bueiro, onOpenChange }: BueiroDetailsDialogProps) {
   return (
     <Dialog open={bueiro !== null} onOpenChange={onOpenChange}>
       <DialogContent>
@@ -43,16 +38,11 @@ export function BueiroDetailsDialog({
             <DialogHeader>
               <DialogTitle>
                 {bueiro.endereco.rua}
-                {bueiro.endereco.numero !== null
-                  ? `, ${bueiro.endereco.numero}`
-                  : ""}
+                {bueiro.endereco.numero !== null ? `, ${bueiro.endereco.numero}` : ""}
               </DialogTitle>
               <DialogDescription className="flex items-center gap-1.5">
-                <span
-                  className={`size-1.5 rounded-full ${BueiroStatusColors[bueiro.status].bg}`}
-                />
-                {BueiroStatusLabels[bueiro.status]} • {bueiro.alertas_ativos}{" "}
-                alerta(s) ativo(s)
+                <span className={`size-1.5 rounded-full ${BueiroStatusColors[bueiro.status].bg}`} />
+                {BueiroStatusLabels[bueiro.status]} • {bueiro.alertas_ativos} alerta(s) ativo(s)
               </DialogDescription>
             </DialogHeader>
 
@@ -78,22 +68,15 @@ export function BueiroDetailsDialog({
               </div>
 
               <div>
-                <dt className="text-xs text-muted-foreground">
-                  Capacidade de fluxo
-                </dt>
+                <dt className="text-xs text-muted-foreground">Capacidade de fluxo</dt>
                 <dd>{formatMeasurement(bueiro.capacidade_fluxo, "L/s")}</dd>
               </div>
 
               <div>
                 <dt className="text-xs text-muted-foreground">Coordenadas</dt>
                 <dd>
-                  {bueiro.endereco.latitude !== null
-                    ? bueiro.endereco.latitude.toFixed(4)
-                    : "—"}
-                  ,{" "}
-                  {bueiro.endereco.longitude !== null
-                    ? bueiro.endereco.longitude.toFixed(4)
-                    : "—"}
+                  {bueiro.endereco.latitude !== null ? bueiro.endereco.latitude.toFixed(4) : "—"},{" "}
+                  {bueiro.endereco.longitude !== null ? bueiro.endereco.longitude.toFixed(4) : "—"}
                 </dd>
               </div>
             </dl>
@@ -101,7 +84,10 @@ export function BueiroDetailsDialog({
         )}
         <DialogFooter>
           <DialogClose render={<Button variant="outline">Fechar</Button>} />
-          <Button>Ver detalhes</Button>
+          <Button
+            nativeButton={false}
+            render={<Link href={`/bueiros/${bueiro?.id}`}>Ver detalhes</Link>}
+          />
         </DialogFooter>
       </DialogContent>
     </Dialog>

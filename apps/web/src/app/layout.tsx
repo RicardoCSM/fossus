@@ -29,14 +29,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-      className={cn("font-sans", inter.variable)}
-    >
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+    <html lang="en" suppressHydrationWarning className={cn("font-sans", inter.variable)}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Providers>
           <div className="grid grid-rows-[auto_1fr] h-svh">
             <Header />

@@ -5,6 +5,7 @@ export const sensoresRouter = Router();
 
 sensoresRouter.post("/", sensoresController.create);
 sensoresRouter.get("/", sensoresController.list);
+sensoresRouter.get("/bueiro/:bueiroId", sensoresController.findByBueiroId);
 sensoresRouter.put("/:id", sensoresController.update);
 sensoresRouter.delete("/:id", sensoresController.remove);
 sensoresRouter.get("/:id", sensoresController.getById);

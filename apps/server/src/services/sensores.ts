@@ -72,6 +72,14 @@ export async function findAll(): Promise<SensorDto[]> {
   return rows.map(toSensorDto);
 }
 
+export async function findByBueiroId(bueiroId: number): Promise<SensorDto[]> {
+  const rows = await prisma.sensores.findMany({
+    where: { bueiro_id: bueiroId },
+    select: SENSOR_SELECT,
+  });
+  return rows.map(toSensorDto);
+}
+
 export async function remove(id: number): Promise<SensorDto | null> {
   const exists = await prisma.sensores.findUnique({ where: { id } });
 

@@ -9,10 +9,7 @@ export default function Header() {
   return (
     <header className="border-b">
       <div className="flex h-12 items-center justify-between px-4">
-        <Link
-          href="/"
-          className="flex items-center gap-2 text-lg font-bold tracking-tight"
-        >
+        <Link href="/" className="flex items-center gap-2 text-lg font-bold tracking-tight">
           <Target className="size-5 text-amber-500" />
           FOSSUS
         </Link>

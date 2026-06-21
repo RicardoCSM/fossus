@@ -23,7 +23,11 @@ export async function fetchLeiturasList(
 export async function createLeitura(data: LeituraInput): Promise<ActionResult<LeituraDto>> {
   const parsed = leituraSchema.safeParse(data);
   if (!parsed.success) {
-    return { success: false, message: "Dados inválidos", errors: zodIssuesToErrors(parsed.error.issues) };
+    return {
+      success: false,
+      message: "Dados inválidos",
+      errors: zodIssuesToErrors(parsed.error.issues),
+    };
   }
 
   try {

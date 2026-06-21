@@ -34,7 +34,11 @@ export async function createTipoAlerta(
 ): Promise<ActionResult<TipoAlertaDto>> {
   const parsed = tipoAlertaSchema.safeParse(data);
   if (!parsed.success) {
-    return { success: false, message: "Dados inválidos", errors: zodIssuesToErrors(parsed.error.issues) };
+    return {
+      success: false,
+      message: "Dados inválidos",
+      errors: zodIssuesToErrors(parsed.error.issues),
+    };
   }
 
   try {
@@ -51,7 +55,11 @@ export async function updateTipoAlerta(
 ): Promise<ActionResult<TipoAlertaDto>> {
   const parsed = updateTipoAlertaSchema.safeParse(data);
   if (!parsed.success) {
-    return { success: false, message: "Dados inválidos", errors: zodIssuesToErrors(parsed.error.issues) };
+    return {
+      success: false,
+      message: "Dados inválidos",
+      errors: zodIssuesToErrors(parsed.error.issues),
+    };
   }
 
   try {

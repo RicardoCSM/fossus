@@ -1,5 +1,11 @@
 import prisma, { Prisma } from "@fossus/db";
-import type { BueiroDto, BueiroStatus } from "@fossus/api-types";
+import type {
+  AlertaPorMesDto,
+  AlertaPorTipoDto,
+  BueiroDashboardDto,
+  BueiroDto,
+  BueiroStatus,
+} from "@fossus/api-types";
 import type { CreateBueiroInput, UpdateBueiroInput } from "../schemas/bueiros";
 
 const BUEIRO_SELECT = {
@@ -127,4 +133,90 @@ export async function remove(id: number): Promise<BueiroDto | null> {
 
   const removed = await prisma.bueiros.delete({ where: { id }, select: BUEIRO_SELECT });
   return toBueiroDto(removed);
+}
+
+const DASHBOARD_MONTHS_BACK = 6;
+const OPEN_MANUTENCAO_STATUSES = ["ABERTA", "EM_ANDAMENTO"];
+
+function monthKey(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  return `${year}-${month}`;
+}
+
+export async function getDashboard(id: number): Promise<BueiroDashboardDto | null> {
+  const exists = await prisma.bueiros.findUnique({ where: { id } });
+  if (!exists) return null;
+
+  const since = new Date();
+  since.setMonth(since.getMonth() - (DASHBOARD_MONTHS_BACK - 1), 1);
+  since.setHours(0, 0, 0, 0);
+
+  const [
+    alertasAtivos,
+    alertasTotal,
+    sensoresAtivos,
+    sensoresTotal,
+    manutencoesAbertas,
+    manutencoesTotal,
+    alertasAtivosDetalhe,
+    alertasRecentes,
+  ] = await prisma.$transaction([
+    prisma.alertas.count({ where: { bueiro_id: id, resolvido: false } }),
+    prisma.alertas.count({ where: { bueiro_id: id } }),
+    prisma.sensores.count({ where: { bueiro_id: id, status: "ATIVO" } }),
+    prisma.sensores.count({ where: { bueiro_id: id } }),
+    prisma.manutencao.count({
+      where: { bueiro_id: id, status: { in: OPEN_MANUTENCAO_STATUSES } },
+    }),
+    prisma.manutencao.count({ where: { bueiro_id: id } }),
+    prisma.alertas.findMany({
+      where: { bueiro_id: id, resolvido: false },
+      select: { nivel: true },
+    }),
+    prisma.alertas.findMany({
+      where: { bueiro_id: id, data_hora: { gte: since } },
+      select: { data_hora: true, tipos_alerta: { select: { nome: true } } },
+    }),
+  ]);
+
+  const tipoTotals = new Map<string, number>();
+  const monthBuckets = new Map<string, Map<string, number>>();
+
+  for (let i = 0; i < DASHBOARD_MONTHS_BACK; i++) {
+    const date = new Date(since);
+    date.setMonth(date.getMonth() + i);
+    monthBuckets.set(monthKey(date), new Map());
+  }
+
+  for (const alerta of alertasRecentes) {
+    const tipo = alerta.tipos_alerta?.nome ?? "Outro";
+    tipoTotals.set(tipo, (tipoTotals.get(tipo) ?? 0) + 1);
+
+    const bucket = monthBuckets.get(monthKey(alerta.data_hora));
+    bucket?.set(tipo, (bucket.get(tipo) ?? 0) + 1);
+  }
+
+  const alertas_por_tipo: AlertaPorTipoDto[] = Array.from(tipoTotals.entries()).map(
+    ([tipo, total]) => ({ tipo, total }),
+  );
+
+  const alertas_por_mes: AlertaPorMesDto[] = Array.from(monthBuckets.entries()).map(
+    ([mes, tipos]) => ({ mes, ...Object.fromEntries(tipos) }),
+  );
+
+  return {
+    bueiro_id: id,
+    status: computeStatus(alertasAtivosDetalhe),
+    totals: {
+      alertas_ativos: alertasAtivos,
+      alertas_total: alertasTotal,
+      sensores_ativos: sensoresAtivos,
+      sensores_total: sensoresTotal,
+      manutencoes_abertas: manutencoesAbertas,
+      manutencoes_total: manutencoesTotal,
+    },
+    alertas_por_tipo,
+    alertas_por_mes,
+  };
 }

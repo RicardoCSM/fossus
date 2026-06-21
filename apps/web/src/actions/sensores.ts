@@ -20,6 +20,15 @@ export async function fetchSensoresList(): Promise<ActionResult<SensorDto[]>> {
   }
 }
 
+export async function fetchSensoresByBueiro(bueiroId: number): Promise<ActionResult<SensorDto[]>> {
+  try {
+    const response = await http.get<SensorDto[]>(`/sensores/bueiro/${bueiroId}`);
+    return { success: true, data: response.data };
+  } catch (e) {
+    return actionError(e, "Erro ao buscar sensores do bueiro.");
+  }
+}
+
 export async function fetchSensor(id: number): Promise<ActionResult<SensorDto>> {
   try {
     const response = await http.get<SensorDto>(`/sensores/${id}`);
@@ -32,7 +41,11 @@ export async function fetchSensor(id: number): Promise<ActionResult<SensorDto>> 
 export async function createSensor(data: SensorInput): Promise<ActionResult<SensorDto>> {
   const parsed = sensorSchema.safeParse(data);
   if (!parsed.success) {
-    return { success: false, message: "Dados inválidos", errors: zodIssuesToErrors(parsed.error.issues) };
+    return {
+      success: false,
+      message: "Dados inválidos",
+      errors: zodIssuesToErrors(parsed.error.issues),
+    };
   }
 
   try {
@@ -49,7 +62,11 @@ export async function updateSensor(
 ): Promise<ActionResult<SensorDto>> {
   const parsed = updateSensorSchema.safeParse(data);
   if (!parsed.success) {
-    return { success: false, message: "Dados inválidos", errors: zodIssuesToErrors(parsed.error.issues) };
+    return {
+      success: false,
+      message: "Dados inválidos",
+      errors: zodIssuesToErrors(parsed.error.issues),
+    };
   }
 
   try {

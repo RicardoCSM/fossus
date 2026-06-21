@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import { createSensorSchema, updateSensorSchema } from "../schemas/sensores";
 import * as sensorService from "../services/sensores";
+import parseId from "@/lib/parseId";
 
 export async function create(req: Request, res: Response) {
   const parsed = createSensorSchema.safeParse(req.body);
@@ -57,4 +58,16 @@ export async function getById(req: Request, res: Response) {
   }
 
   res.json(sensor);
+}
+
+export async function findByBueiroId(req: Request, res: Response): Promise<void> {
+  const bueiroId = parseId(req.params.bueiroId);
+
+  if (bueiroId === null) {
+    res.status(400).json({ message: "ID do bueiro inválido" });
+    return;
+  }
+
+  const sensores = await sensorService.findByBueiroId(bueiroId);
+  res.json(sensores);
 }

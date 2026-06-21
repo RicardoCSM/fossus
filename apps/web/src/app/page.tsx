@@ -3,32 +3,29 @@
 import { useState } from "react";
 
 import type { BueiroDto, BueiroStatus } from "@fossus/api-types";
-import { Button } from "@fossus/ui/components/button";
-import {
-  Map,
-  MapMarker,
-  MarkerContent,
-  MarkerTooltip,
-} from "@fossus/ui/components/ui/map";
+import { Map, MapMarker, MarkerContent, MarkerTooltip } from "@fossus/ui/components/ui/map";
 import { useQuery } from "@tanstack/react-query";
-import { FlagTriangleRight, PlusCircle } from "lucide-react";
+import { FlagTriangleRight } from "lucide-react";
 
 import { fetchBueirosList } from "@/actions/bueiros";
 import { BueiroDetailsDialog } from "@/components/bueiro-details-dialog";
 import { BueiroStatusColors, BueiroStatusLabels } from "@/constants/bueiro-status";
+import { CreateBueiroDialog } from "@/components/create-bueiro-dialog";
 
 function hasCoordinates(
   bueiro: BueiroDto,
 ): bueiro is BueiroDto & { endereco: { latitude: number; longitude: number } } {
-  return (
-    bueiro.endereco.latitude !== null && bueiro.endereco.longitude !== null
-  );
+  return bueiro.endereco.latitude !== null && bueiro.endereco.longitude !== null;
 }
 
 export default function Home() {
   const [selectedBueiro, setSelectedBueiro] = useState<BueiroDto | null>(null);
 
-  const { data: bueiros = [], dataUpdatedAt } = useQuery({
+  const {
+    data: bueiros = [],
+    dataUpdatedAt,
+    refetch,
+  } = useQuery({
     queryKey: ["bueiros"],
     queryFn: async () => {
       const result = await fetchBueirosList();
@@ -42,10 +39,7 @@ export default function Home() {
       acc[bueiro.status] += 1;
       return acc;
     },
-    { normal: 0, warning: 0, critical: 0 } satisfies Record<
-      BueiroStatus,
-      number
-    >,
+    { normal: 0, warning: 0, critical: 0 } satisfies Record<BueiroStatus, number>,
   );
 
   return (
@@ -58,9 +52,7 @@ export default function Home() {
     >
       <div className="absolute top-4 left-4 z-10 rounded-xl bg-background">
         <div className="rounded-xl border border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 p-4 ">
-          <div className="mb-3 text-sm font-medium text-foreground">
-            Rede de Drenagem
-          </div>
+          <div className="mb-3 text-sm font-medium text-foreground">Rede de Drenagem</div>
 
           <div className="grid grid-cols-3 gap-4">
             <div>
@@ -87,18 +79,14 @@ export default function Home() {
 
           {dataUpdatedAt > 0 && (
             <div className="mt-3 border-t border-border pt-3 text-xs text-muted-foreground">
-              Atualizado às{" "}
-              {new Date(dataUpdatedAt).toLocaleTimeString("pt-BR")}
+              Atualizado às {new Date(dataUpdatedAt).toLocaleTimeString("pt-BR")}
             </div>
           )}
         </div>
       </div>
 
       <div className="absolute top-2 right-2 z-10 bg-background rounded-lg">
-        <Button variant="outline">
-          <PlusCircle />
-          Cadastrar Bueiro
-        </Button>
+        <CreateBueiroDialog refetch={refetch} />
       </div>
 
       {bueiros.filter(hasCoordinates).map((bueiro) => {

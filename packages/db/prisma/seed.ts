@@ -16,9 +16,9 @@ async function clear() {
 async function seedTiposSensor() {
   const data = [
     { nome: "Chuva", unidade: "mm" },
-    { nome: "Vazao", unidade: "L/s" },
+    { nome: "Vazão", unidade: "L/s" },
     { nome: "Sedimento", unidade: "cm" },
-    { nome: "Nivel da Agua", unidade: "cm" },
+    { nome: "Nível da Água", unidade: "cm" },
   ];
 
   const tiposSensor = [];
@@ -200,8 +200,7 @@ async function seedBueiros(enderecos: { id: number }[]) {
   const bueiros = [];
   for (const item of data) {
     const endereco = enderecos[item.enderecoIndex];
-    if (!endereco)
-      throw new Error(`Missing endereco at index ${item.enderecoIndex}`);
+    if (!endereco) throw new Error(`Missing endereco at index ${item.enderecoIndex}`);
     bueiros.push(
       await prisma.bueiros.create({
         data: {
@@ -217,10 +216,7 @@ async function seedBueiros(enderecos: { id: number }[]) {
   return bueiros;
 }
 
-async function seedSensores(
-  bueiros: { id: number }[],
-  tiposSensor: { id: number }[],
-) {
+async function seedSensores(bueiros: { id: number }[], tiposSensor: { id: number }[]) {
   const CHUVA = 0;
   const NIVEL_AGUA = 3;
 
@@ -386,8 +382,7 @@ async function seedSensores(
     const bueiro = bueiros[item.bueiroIndex];
     const tipoSensor = tiposSensor[item.tipoIndex];
     if (!bueiro) throw new Error(`Missing bueiro at index ${item.bueiroIndex}`);
-    if (!tipoSensor)
-      throw new Error(`Missing tipo_sensor at index ${item.tipoIndex}`);
+    if (!tipoSensor) throw new Error(`Missing tipo_sensor at index ${item.tipoIndex}`);
     sensores.push(
       await prisma.sensores.create({
         data: {
@@ -427,6 +422,14 @@ async function seedTelefones(equipes: { id: number }[]) {
 
 async function seedLeituras(sensores: { id: number }[]) {
   const data = [
+    // Histórico - alguns meses anteriores
+    { sensorIndex: 1, valor: 18.0, data_hora: "2026-01-08 07:30:00" },
+    { sensorIndex: 11, valor: 30.5, data_hora: "2026-02-11 14:20:00" },
+    { sensorIndex: 5, valor: 65.0, data_hora: "2026-03-02 13:00:00" },
+    { sensorIndex: 9, valor: 28.0, data_hora: "2026-04-12 15:15:00" },
+    { sensorIndex: 17, valor: 80.0, data_hora: "2026-05-13 16:00:00" },
+    { sensorIndex: 13, valor: 19.5, data_hora: "2026-05-20 11:30:00" },
+
     // Bueiro 1
     { sensorIndex: 1, valor: 22.5, data_hora: "2026-06-01 08:00:00" },
     { sensorIndex: 1, valor: 35.0, data_hora: "2026-06-01 09:00:00" },
@@ -452,15 +455,104 @@ async function seedLeituras(sensores: { id: number }[]) {
   }
 }
 
-async function seedManutencao(
-  bueiros: { id: number }[],
-  equipes: { id: number }[],
-) {
+async function seedManutencao(bueiros: { id: number }[], equipes: { id: number }[]) {
   const data = [
+    // Janeiro
+    {
+      bueiroIndex: 0,
+      equipeIndex: 0,
+      data_abertura: "2026-01-05 08:00:00",
+      data_execucao: "2026-01-06 14:00:00",
+      status: "CONCLUIDA",
+      descricao: "Limpeza preventiva de rotina",
+    },
+    {
+      bueiroIndex: 5,
+      equipeIndex: 1,
+      data_abertura: "2026-01-20 09:00:00",
+      data_execucao: "2026-01-21 11:00:00",
+      status: "CONCLUIDA",
+      descricao: "Desobstrução de bueiro",
+    },
+
+    // Fevereiro
+    {
+      bueiroIndex: 3,
+      equipeIndex: 0,
+      data_abertura: "2026-02-10 08:30:00",
+      data_execucao: "2026-02-11 10:15:00",
+      status: "CONCLUIDA",
+      descricao: "Inspeção de rotina",
+    },
+    {
+      bueiroIndex: 9,
+      equipeIndex: 2,
+      data_abertura: "2026-02-15 13:00:00",
+      data_execucao: null,
+      status: "CANCELADA",
+      descricao: "Cancelada - acesso bloqueado",
+    },
+
+    // Março
+    {
+      bueiroIndex: 1,
+      equipeIndex: 1,
+      data_abertura: "2026-03-05 09:00:00",
+      data_execucao: "2026-03-06 12:30:00",
+      status: "CONCLUIDA",
+      descricao: "Troca de sensor de vazão",
+    },
+    {
+      bueiroIndex: 6,
+      equipeIndex: 0,
+      data_abertura: "2026-03-18 07:45:00",
+      data_execucao: "2026-03-19 09:50:00",
+      status: "CONCLUIDA",
+      descricao: "Limpeza de sedimentos",
+    },
+
+    // Abril
+    {
+      bueiroIndex: 4,
+      equipeIndex: 2,
+      data_abertura: "2026-04-02 10:00:00",
+      data_execucao: "2026-04-03 15:20:00",
+      status: "CONCLUIDA",
+      descricao: "Reparo estrutural",
+    },
+    {
+      bueiroIndex: 7,
+      equipeIndex: 1,
+      data_abertura: "2026-04-22 08:15:00",
+      data_execucao: "2026-04-23 11:00:00",
+      status: "CONCLUIDA",
+      descricao: "Calibração de sensores",
+    },
+
+    // Maio
+    {
+      bueiroIndex: 0,
+      equipeIndex: 0,
+      data_abertura: "2026-05-08 08:00:00",
+      data_execucao: "2026-05-09 10:40:00",
+      status: "CONCLUIDA",
+      descricao: "Inspeção preventiva mensal",
+    },
+    {
+      bueiroIndex: 10,
+      equipeIndex: 1,
+      data_abertura: "2026-05-25 14:00:00",
+      data_execucao: null,
+      status: "EM_ANDAMENTO",
+      descricao: "Avaliação de capacidade de fluxo reduzida",
+    },
+
+    // Junho
     {
       bueiroIndex: 2,
       equipeIndex: 2,
       data_abertura: "2026-06-01 10:30:00",
+      data_execucao: null,
       status: "EM_ANDAMENTO",
       descricao: "Risco de transbordamento - inspeção urgente",
     },
@@ -468,8 +560,17 @@ async function seedManutencao(
       bueiroIndex: 8,
       equipeIndex: 2,
       data_abertura: "2026-06-01 11:00:00",
+      data_execucao: null,
       status: "ABERTA",
       descricao: "Possível obstrução severa",
+    },
+    {
+      bueiroIndex: 5,
+      equipeIndex: 0,
+      data_abertura: "2026-06-10 09:20:00",
+      data_execucao: null,
+      status: "ABERTA",
+      descricao: "Verificação de alerta de nível alto",
     },
   ];
 
@@ -483,7 +584,7 @@ async function seedManutencao(
         bueiro_id: bueiro.id,
         equipe_id: equipe.id,
         data_abertura: new Date(item.data_abertura.replace(" ", "T")),
-        data_execucao: null,
+        data_execucao: item.data_execucao ? new Date(item.data_execucao.replace(" ", "T")) : null,
         status: item.status,
         descricao: item.descricao,
       },
@@ -493,10 +594,10 @@ async function seedManutencao(
 
 async function seedTiposAlerta() {
   const data = [
-    { nome: "OBSTRUCAO", descricao: "Obstrucao critica do bueiro" },
-    { nome: "ALAGAMENTO", descricao: "Risco ou ocorrencia de alagamento" },
-    { nome: "VAZAO_BAIXA", descricao: "Reducao da capacidade de escoamento" },
-    { nome: "SENSOR_OFFLINE", descricao: "Sensor sem comunicacao" },
+    { nome: "OBSTRUÇÃO", descricao: "Obstrução crítica do bueiro" },
+    { nome: "ALAGAMENTO", descricao: "Risco ou ocorrência de alagamento" },
+    { nome: "VAZÃO_BAIXA", descricao: "Redução da capacidade de escoamento" },
+    { nome: "SENSOR_OFFLINE", descricao: "Sensor sem comunicação" },
   ];
 
   const tiposAlerta = [];
@@ -506,20 +607,21 @@ async function seedTiposAlerta() {
   return tiposAlerta;
 }
 
-async function seedAlertas(
-  bueiros: { id: number }[],
-  tiposAlerta: { id: number }[],
-) {
+async function seedAlertas(bueiros: { id: number }[], tiposAlerta: { id: number }[]) {
   const OBSTRUCAO = 0;
   const ALAGAMENTO = 1;
+  const VAZAO_BAIXA = 2;
+  const SENSOR_OFFLINE = 3;
 
-  const data = [
+  // Alertas ativos atuais - definem o status exibido no mapa (crítico/atenção)
+  const ativos = [
     {
       bueiroIndex: 2,
       data_hora: "2026-06-01 10:00:00",
       nivel: "CRITICO",
       descricao: "Nível de água crítico - risco de transbordamento",
       tipoIndex: ALAGAMENTO,
+      resolvido: false,
     },
     {
       bueiroIndex: 4,
@@ -527,6 +629,7 @@ async function seedAlertas(
       nivel: "ALTO",
       descricao: "Acúmulo de sedimentos elevado",
       tipoIndex: OBSTRUCAO,
+      resolvido: false,
     },
     {
       bueiroIndex: 8,
@@ -534,6 +637,7 @@ async function seedAlertas(
       nivel: "CRITICO",
       descricao: "Possível obstrução total detectada",
       tipoIndex: OBSTRUCAO,
+      resolvido: false,
     },
     {
       bueiroIndex: 10,
@@ -541,22 +645,230 @@ async function seedAlertas(
       nivel: "ALTO",
       descricao: "Nível de água elevado",
       tipoIndex: ALAGAMENTO,
+      resolvido: false,
     },
   ];
 
-  for (const item of data) {
+  // Histórico de alertas já resolvidos, espalhado pelos últimos meses,
+  // cobrindo todos os tipos e níveis para alimentar os gráficos do dashboard.
+  const historico = [
+    // Janeiro
+    {
+      bueiroIndex: 0,
+      data_hora: "2026-01-08 07:40:00",
+      nivel: "MEDIO",
+      descricao: "Chuva forte detectada",
+      tipoIndex: ALAGAMENTO,
+      resolvido: true,
+    },
+    {
+      bueiroIndex: 3,
+      data_hora: "2026-01-14 16:20:00",
+      nivel: "BAIXO",
+      descricao: "Pequeno acúmulo de folhas",
+      tipoIndex: OBSTRUCAO,
+      resolvido: true,
+    },
+    {
+      bueiroIndex: 6,
+      data_hora: "2026-01-19 11:05:00",
+      nivel: "ALTO",
+      descricao: "Redução na vazão registrada",
+      tipoIndex: VAZAO_BAIXA,
+      resolvido: true,
+    },
+    {
+      bueiroIndex: 9,
+      data_hora: "2026-01-27 08:50:00",
+      nivel: "MEDIO",
+      descricao: "Sensor de nível intermitente",
+      tipoIndex: SENSOR_OFFLINE,
+      resolvido: true,
+    },
+
+    // Fevereiro
+    {
+      bueiroIndex: 1,
+      data_hora: "2026-02-03 09:10:00",
+      nivel: "ALTO",
+      descricao: "Obstrução parcial por sedimentos",
+      tipoIndex: OBSTRUCAO,
+      resolvido: true,
+    },
+    {
+      bueiroIndex: 5,
+      data_hora: "2026-02-11 14:35:00",
+      nivel: "CRITICO",
+      descricao: "Transbordamento em andamento",
+      tipoIndex: ALAGAMENTO,
+      resolvido: true,
+    },
+    {
+      bueiroIndex: 7,
+      data_hora: "2026-02-18 10:00:00",
+      nivel: "BAIXO",
+      descricao: "Vazão levemente abaixo do esperado",
+      tipoIndex: VAZAO_BAIXA,
+      resolvido: true,
+    },
+    {
+      bueiroIndex: 10,
+      data_hora: "2026-02-24 06:55:00",
+      nivel: "MEDIO",
+      descricao: "Sensor de chuva offline",
+      tipoIndex: SENSOR_OFFLINE,
+      resolvido: true,
+    },
+
+    // Março
+    {
+      bueiroIndex: 2,
+      data_hora: "2026-03-02 13:15:00",
+      nivel: "MEDIO",
+      descricao: "Acúmulo de detritos após chuva",
+      tipoIndex: OBSTRUCAO,
+      resolvido: true,
+    },
+    {
+      bueiroIndex: 4,
+      data_hora: "2026-03-09 17:40:00",
+      nivel: "ALTO",
+      descricao: "Nível de água subindo rapidamente",
+      tipoIndex: ALAGAMENTO,
+      resolvido: true,
+    },
+    {
+      bueiroIndex: 8,
+      data_hora: "2026-03-16 08:25:00",
+      nivel: "BAIXO",
+      descricao: "Vazão reduzida por entupimento leve",
+      tipoIndex: VAZAO_BAIXA,
+      resolvido: true,
+    },
+    {
+      bueiroIndex: 0,
+      data_hora: "2026-03-23 12:00:00",
+      nivel: "CRITICO",
+      descricao: "Sensor de nível sem comunicação",
+      tipoIndex: SENSOR_OFFLINE,
+      resolvido: true,
+    },
+
+    // Abril
+    {
+      bueiroIndex: 3,
+      data_hora: "2026-04-04 09:45:00",
+      nivel: "ALTO",
+      descricao: "Obstrução por galhos e folhas",
+      tipoIndex: OBSTRUCAO,
+      resolvido: true,
+    },
+    {
+      bueiroIndex: 6,
+      data_hora: "2026-04-12 15:30:00",
+      nivel: "MEDIO",
+      descricao: "Alagamento pontual na via",
+      tipoIndex: ALAGAMENTO,
+      resolvido: true,
+    },
+    {
+      bueiroIndex: 9,
+      data_hora: "2026-04-19 07:20:00",
+      nivel: "BAIXO",
+      descricao: "Pequena redução de vazão",
+      tipoIndex: VAZAO_BAIXA,
+      resolvido: true,
+    },
+    {
+      bueiroIndex: 1,
+      data_hora: "2026-04-26 18:10:00",
+      nivel: "ALTO",
+      descricao: "Sensor de vazão instável",
+      tipoIndex: SENSOR_OFFLINE,
+      resolvido: true,
+    },
+
+    // Maio
+    {
+      bueiroIndex: 5,
+      data_hora: "2026-05-05 10:50:00",
+      nivel: "BAIXO",
+      descricao: "Sedimentação leve identificada",
+      tipoIndex: OBSTRUCAO,
+      resolvido: true,
+    },
+    {
+      bueiroIndex: 7,
+      data_hora: "2026-05-13 16:05:00",
+      nivel: "CRITICO",
+      descricao: "Risco iminente de transbordamento",
+      tipoIndex: ALAGAMENTO,
+      resolvido: true,
+    },
+    {
+      bueiroIndex: 10,
+      data_hora: "2026-05-20 11:35:00",
+      nivel: "MEDIO",
+      descricao: "Vazão abaixo da média semanal",
+      tipoIndex: VAZAO_BAIXA,
+      resolvido: true,
+    },
+    {
+      bueiroIndex: 2,
+      data_hora: "2026-05-28 09:00:00",
+      nivel: "ALTO",
+      descricao: "Sensor de chuva sem resposta",
+      tipoIndex: SENSOR_OFFLINE,
+      resolvido: true,
+    },
+
+    // Junho (anteriores aos alertas ativos)
+    {
+      bueiroIndex: 4,
+      data_hora: "2026-06-03 07:15:00",
+      nivel: "BAIXO",
+      descricao: "Acúmulo leve de detritos",
+      tipoIndex: OBSTRUCAO,
+      resolvido: true,
+    },
+    {
+      bueiroIndex: 8,
+      data_hora: "2026-06-08 13:40:00",
+      nivel: "MEDIO",
+      descricao: "Nível de água acima do normal",
+      tipoIndex: ALAGAMENTO,
+      resolvido: true,
+    },
+    {
+      bueiroIndex: 1,
+      data_hora: "2026-06-12 08:05:00",
+      nivel: "BAIXO",
+      descricao: "Vazão estabilizada após chuva",
+      tipoIndex: VAZAO_BAIXA,
+      resolvido: true,
+    },
+    {
+      bueiroIndex: 6,
+      data_hora: "2026-06-15 19:20:00",
+      nivel: "ALTO",
+      descricao: "Sensor de nível intermitente",
+      tipoIndex: SENSOR_OFFLINE,
+      resolvido: true,
+    },
+  ];
+
+  for (const item of [...ativos, ...historico]) {
     const bueiro = bueiros[item.bueiroIndex];
     const tipoAlerta = tiposAlerta[item.tipoIndex];
     if (!bueiro) throw new Error(`Missing bueiro at index ${item.bueiroIndex}`);
-    if (!tipoAlerta)
-      throw new Error(`Missing tipo_alerta at index ${item.tipoIndex}`);
+    if (!tipoAlerta) throw new Error(`Missing tipo_alerta at index ${item.tipoIndex}`);
     await prisma.alertas.create({
       data: {
         bueiro_id: bueiro.id,
         data_hora: new Date(item.data_hora.replace(" ", "T")),
         nivel: item.nivel,
         descricao: item.descricao,
-        resolvido: false,
+        resolvido: item.resolvido,
         tipo_alerta_id: tipoAlerta.id,
       },
     });

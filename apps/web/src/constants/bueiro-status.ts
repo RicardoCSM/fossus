@@ -1,6 +1,10 @@
 import type { BueiroStatus } from "@fossus/api-types";
 
-export const BueiroStatuses = ["normal", "warning", "critical"] as const satisfies readonly BueiroStatus[];
+export const BueiroStatuses = [
+  "normal",
+  "warning",
+  "critical",
+] as const satisfies readonly BueiroStatus[];
 
 export const BueiroStatusLabels: Record<BueiroStatus, string> = {
   normal: "Normal",
